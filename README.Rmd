@@ -17,20 +17,57 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-The goal of RMarkdown-Reproducibility-Template is to ...
+This is a template RMarkdown document which follows minimal reproducibility best practices.
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
+## Dependencies
 
-```{r cars}
-summary(cars)
+In this section, you should describe dependencies needed to execute your code. 
+
+### System Dependencies
+
+Make sure to list all system dependencies needed to execute your code. For example, if you use R's built-in pipe operator `|>`, then your code depends on R version at least 4.1. If you use R's stan package, then you need V8 as a system dependency.
+
+At the very least, you should provide a list of dependencies such as:
+```yaml
+dependencies:
+  - R>=4.1  # https://www.r-project.org/
+  - V8  # https://v8.dev/
 ```
 
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date. `devtools::build_readme()` is handy for this. You could also use GitHub Actions to re-render `README.Rmd` every time you push. An example workflow can be found here: <https://github.com/r-lib/actions/tree/v1/examples>.
+### R Package Dependencies
 
-You can also embed plots, for example:
+R packages dependencies can be managed and installed directly in your code. For this, I recommend using the **pacman** package:
 
-```{r pressure, echo = FALSE}
-plot(pressure)
+```{r pacman}
+if (!require(pacman)) install.packages("pacman")
+
+pacman::p_load(ggplot2)  # This installs and loads `ggplot`
 ```
 
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub.
+
+## Code and Analyses
+
+In this section, you should place all of your code and analyses.
+
+### Managing Figures
+
+If you generate figures for an external document, then make sure to both display the figures and save them automatically to a subfolder. Note that the subfolder may not exist on the computer of the person running your code. As such, you should create if if it does not already exist:
+
+```{r figure}
+fig <- ggplot(pressure) +
+  geom_point(aes(x=temperature, y=pressure))
+
+dir.create("output", showWarnings=FALSE)
+ggsave("output/pressure_plot.pdf", fig)
+
+show(fig)
+```
+
+## System Information
+
+In this section, provide information about the system that was used to execute the RMarkdown document. This information can be generated automatically as follows:
+
+```{r}
+sessionInfo()
+```
+
