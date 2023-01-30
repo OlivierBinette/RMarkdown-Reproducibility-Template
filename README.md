@@ -57,7 +57,7 @@ fig <- ggplot(pressure) +
   geom_point(aes(x=temperature, y=pressure))
 
 dir.create("output", showWarnings=FALSE)
-ggsave("output/pressure_plot.pdf", fig)
+ggsave("output/pressure_plot.pdf", fig) 
 #> Saving 7 x 5 in image
 
 show(fig)
